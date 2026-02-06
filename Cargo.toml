@@ -1,0 +1,23 @@
+[package]
+name = "tokenx-rs"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+authors = ["Qbit AI"]
+description = "Fast token count estimation for LLMs at 96% accuracy without a full tokenizer"
+license = "MIT"
+repository = "https://github.com/qbit-ai/tokenx-rs"
+documentation = "https://docs.rs/tokenx-rs"
+homepage = "https://github.com/qbit-ai/tokenx-rs"
+readme = "README.md"
+keywords = ["llm", "tokenizer", "tokens", "gpt", "claude"]
+categories = ["text-processing", "algorithms"]
+exclude = [".github/", "benches/", "tests/"]
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+proptest = "1.4"
+
+[[bench]]
+name = "estimation"
+harness = false

@@ -1,0 +1,4 @@
+[ai]
+provider = "vertex_ai"
+model = "claude-opus-4-6@default"
+agent_mode = "auto-approve"
