@@ -154,17 +154,17 @@ This document outlines the plan to create `tokenx-rs`, a Rust port of the [token
   - [x] Run `cargo publish --dry-run`
   - [x] Verify all metadata in Cargo.toml
 
-- [ ] Publish to crates.io
-  - [ ] Ensure crates.io API token is configured
-  - [ ] Run `cargo publish`
-  - [ ] Verify crate appears on crates.io
-  - [ ] Verify docs appear on docs.rs
+- [x] Publish to crates.io
+  - [x] Ensure crates.io API token is configured
+  - [x] Run `cargo publish`
+  - [x] Verify crate appears on crates.io
+  - [x] Verify docs appear on docs.rs
 
-- [ ] Create GitHub release
-  - [ ] Tag `v0.1.0`
-  - [ ] Write release notes
-  - [ ] Link to crates.io
-  - [ ] Link to docs.rs
+- [x] Create GitHub release
+  - [x] Tag `v0.1.0`
+  - [x] Write release notes
+  - [x] Link to crates.io
+  - [x] Link to docs.rs
 
 ### Phase 6: Integration with Qbit
 
