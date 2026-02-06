@@ -48,85 +48,75 @@ This document outlines the plan to create `tokenx-rs`, a Rust port of the [token
   - [x] Add topics: `rust`, `llm`, `tokenizer`, `tokens`, `gpt`, `claude`, `nlp`
   - [x] Enable Issues and Discussions
 
-- [ ] Initialize Rust project structure
-  - [ ] Run `cargo init --lib`
-  - [ ] Configure `Cargo.toml` with metadata
-  - [ ] Create directory structure (see below)
-  - [ ] Add `.rustfmt.toml` for formatting preferences
+- [x] Initialize Rust project structure
+  - [x] Run `cargo init --lib`
+  - [x] Configure `Cargo.toml` with metadata
+  - [x] Create directory structure (see below)
+  - [x] Add `.rustfmt.toml` for formatting preferences
 
-- [ ] Set up GitHub Actions CI/CD
-  - [ ] `.github/workflows/ci.yml` - Test, clippy, rustfmt on PRs
-  - [ ] `.github/workflows/publish.yml` - Publish to crates.io on release tag
+- [x] Set up GitHub Actions CI/CD
+  - [x] `.github/workflows/ci.yml` - Test, clippy, rustfmt on PRs
+  - [x] `.github/workflows/publish.yml` - Publish to crates.io on release tag
 
 ### Phase 2: Core Implementation
 
-- [ ] Implement pattern matching (`src/patterns.rs`)
-  - [ ] Whitespace detection regex
-  - [ ] CJK character range regex (Chinese, Japanese, Korean)
-  - [ ] Numeric pattern regex
-  - [ ] Punctuation pattern regex
-  - [ ] Alphanumeric pattern regex
-  - [ ] Language-specific diacritics (German/French, Slavic)
-  - [ ] Token split pattern (whitespace + punctuation)
-  - [ ] Use `once_cell::sync::Lazy` for compiled patterns
+- [x] ~~Implement pattern matching (`src/patterns.rs`)~~ — Replaced with inline char-level classification (no regex)
 
-- [ ] Implement configuration types (`src/config.rs`)
-  - [ ] `LanguageConfig` struct (pattern, chars_per_token)
-  - [ ] `EstimationOptions` struct (default_chars_per_token, language_configs)
-  - [ ] `SplitOptions` struct (extends EstimationOptions with overlap)
-  - [ ] Default language configurations (German, French, Slavic)
-  - [ ] Builder pattern for options
+- [x] Implement configuration types (`src/config.rs`)
+  - [x] `LanguageConfig` struct (matcher fn, chars_per_token)
+  - [x] `EstimationOptions` struct (default_chars_per_token, language_configs)
+  - [x] `SplitOptions` struct (extends EstimationOptions with overlap)
+  - [x] Default language configurations (German, French, Spanish)
 
-- [ ] Implement core estimator (`src/estimator.rs`)
-  - [ ] `estimate_token_count(text: &str) -> usize`
-  - [ ] `estimate_token_count_with_options(text: &str, options: &EstimationOptions) -> usize`
-  - [ ] `estimate_segment_tokens()` internal function
-  - [ ] `get_language_chars_per_token()` internal function
+- [x] Implement core estimator (`src/estimator.rs`)
+  - [x] `estimate_token_count(text: &str) -> usize`
+  - [x] `estimate_token_count_with_options(text: &str, options: &EstimationOptions) -> usize`
+  - [x] Single-pass char scanner with segment scoring (replaced regex split + classify)
+  - [x] `detect_language_cpt()` internal function
 
-- [ ] Implement utility functions (`src/utils.rs`)
-  - [ ] `is_within_token_limit(text: &str, limit: usize) -> bool`
-  - [ ] `slice_by_tokens(text: &str, start: usize, end: Option<usize>) -> String`
-  - [ ] `split_by_tokens(text: &str, tokens_per_chunk: usize) -> Vec<String>`
-  - [ ] Support negative indices in slice_by_tokens (like Python slicing)
-  - [ ] Support overlap in split_by_tokens
+- [x] Implement utility functions (`src/utils.rs`)
+  - [x] `is_within_token_limit(text: &str, limit: usize) -> bool`
+  - [x] `slice_by_tokens(text: &str, start: usize, end: Option<usize>) -> String`
+  - [x] `split_by_tokens(text: &str, tokens_per_chunk: usize) -> Vec<String>`
+  - [x] Support negative indices in slice_by_tokens (like Python slicing)
+  - [x] Support overlap in split_by_tokens
 
-- [ ] Create public API (`src/lib.rs`)
-  - [ ] Re-export all public types and functions
-  - [ ] Module documentation with examples
-  - [ ] Feature flags (if any)
+- [x] Create public API (`src/lib.rs`)
+  - [x] Re-export all public types and functions
+  - [x] Module documentation with examples
 
 ### Phase 3: Testing
 
-- [ ] Unit tests (`src/*.rs` inline tests)
-  - [ ] Empty string handling
-  - [ ] Pure whitespace
-  - [ ] Pure CJK text
-  - [ ] Pure punctuation
-  - [ ] Mixed content
-  - [ ] Numeric strings
-  - [ ] Short words (≤3 chars)
-  - [ ] Language-specific text (German, French, Slavic)
+- [x] Unit tests (`src/*.rs` inline tests)
+  - [x] Empty string handling
+  - [x] Pure whitespace
+  - [x] Pure CJK text
+  - [x] Pure punctuation
+  - [x] Mixed content
+  - [x] Numeric strings
+  - [x] Short words (≤3 chars)
+  - [x] Language-specific text (German, French)
+  - [x] Underscore identifiers
+  - [x] Custom options
 
-- [ ] Integration tests (`tests/accuracy.rs`)
-  - [ ] Port all tokenx benchmark cases
-  - [ ] Add test fixtures for known texts
-  - [ ] Compare against tiktoken-rs for ground truth validation
-  - [ ] Document accuracy per test case
+- [x] Integration tests (`tests/accuracy.rs`)
+  - [x] Port tokenx benchmark cases
+  - [x] Add test fixtures for known texts
+  - [x] Document accuracy per test case
 
-- [ ] Property-based tests (`tests/proptest.rs`)
-  - [ ] Arbitrary string input doesn't panic
-  - [ ] Result is always >= 0
-  - [ ] Empty input returns 0
-  - [ ] slice_by_tokens round-trip properties
-  - [ ] split_by_tokens concatenation properties
+- [x] Property-based tests (`tests/proptest.rs`)
+  - [x] Arbitrary string input doesn't panic
+  - [x] Result is always >= 0
+  - [x] Empty input returns 0
+  - [x] slice_by_tokens round-trip properties
+  - [x] split_by_tokens concatenation properties
 
-- [ ] Benchmarks (`benches/estimation.rs`)
-  - [ ] Short text (~20 tokens)
-  - [ ] Medium text (~1000 tokens)
-  - [ ] Long text (~30000 tokens)
-  - [ ] CJK text
-  - [ ] Code/TypeScript
-  - [ ] Compare with tiktoken-rs performance
+- [x] Benchmarks (`benches/estimation.rs`)
+  - [x] Short text (~20 tokens)
+  - [x] Medium text (~1000 tokens)
+  - [x] Long text (~30000 tokens)
+  - [x] CJK text
+  - [x] Code
 
 ### Phase 4: Documentation
 
@@ -136,32 +126,33 @@ This document outlines the plan to create `tokenx-rs`, a Rust port of the [token
   - [x] Credit to original tokenx project
   - [x] Installation instructions
   - [x] Quick start example
+  - [x] How it works section
+  - [x] Performance benchmarks table (Rust vs Node.js)
   - [x] Accuracy benchmarks table
   - [x] License section
 
-- [ ] Rustdoc documentation
-  - [ ] Crate-level documentation with examples
-  - [ ] All public functions documented
-  - [ ] All public types documented
-  - [ ] Examples for each major function
-  - [ ] Links to related items
+- [x] Rustdoc documentation
+  - [x] Crate-level documentation with examples
+  - [x] All public functions documented
+  - [x] All public types documented
+  - [x] Examples for each major function
 
-- [ ] CHANGELOG.md
-  - [ ] Follow Keep a Changelog format
-  - [ ] Document v0.1.0 initial release
+- [x] CHANGELOG.md
+  - [x] Follow Keep a Changelog format
+  - [x] Document v0.1.0 initial release
 
 - [x] LICENSE
   - [x] MIT license text
 
 ### Phase 5: Publishing
 
-- [ ] Pre-publish validation
-  - [ ] Run `cargo fmt --check`
-  - [ ] Run `cargo clippy -- -D warnings`
-  - [ ] Run `cargo test`
-  - [ ] Run `cargo doc --no-deps`
-  - [ ] Run `cargo publish --dry-run`
-  - [ ] Verify all metadata in Cargo.toml
+- [x] Pre-publish validation
+  - [x] Run `cargo fmt --check`
+  - [x] Run `cargo clippy -- -D warnings`
+  - [x] Run `cargo test`
+  - [x] Run `cargo doc --no-deps`
+  - [x] Run `cargo publish --dry-run`
+  - [x] Verify all metadata in Cargo.toml
 
 - [ ] Publish to crates.io
   - [ ] Ensure crates.io API token is configured
@@ -197,8 +188,7 @@ tokenx-rs/
 ├── src/
 │   ├── lib.rs                     # Public API, crate docs
 │   ├── config.rs                  # LanguageConfig, EstimationOptions
-│   ├── estimator.rs               # Core estimation logic
-│   ├── patterns.rs                # Compiled regex patterns
+│   ├── estimator.rs               # Core estimation logic (single-pass scanner)
 │   └── utils.rs                   # is_within_limit, slice, split
 ├── tests/
 │   ├── accuracy.rs                # Accuracy validation tests
@@ -213,138 +203,22 @@ tokenx-rs/
 
 ---
 
-## Cargo.toml
-
-```toml
-[package]
-name = "tokenx-rs"
-version = "0.1.0"
-edition = "2021"
-rust-version = "1.70"
-authors = ["Qbit AI"]
-description = "Fast token count estimation for LLMs at 96% accuracy without a full tokenizer"
-license = "MIT"
-repository = "https://github.com/qbit-ai/tokenx-rs"
-documentation = "https://docs.rs/tokenx-rs"
-homepage = "https://github.com/qbit-ai/tokenx-rs"
-readme = "README.md"
-keywords = ["llm", "tokenizer", "tokens", "gpt", "claude"]
-categories = ["text-processing", "algorithms"]
-exclude = [".github/", "benches/", "tests/"]
-
-[dependencies]
-once_cell = "1.19"
-regex = "1.10"
-
-[dev-dependencies]
-criterion = { version = "0.5", features = ["html_reports"] }
-proptest = "1.4"
-tiktoken-rs = "0.9"  # For accuracy validation only
-
-[[bench]]
-name = "estimation"
-harness = false
-```
-
----
-
-## GitHub Actions: CI Workflow
-
-```yaml
-# .github/workflows/ci.yml
-name: CI
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-env:
-  CARGO_TERM_COLOR: always
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-      - run: cargo test --all-features
-
-  clippy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          components: clippy
-      - uses: Swatinem/rust-cache@v2
-      - run: cargo clippy --all-features -- -D warnings
-
-  fmt:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt
-      - run: cargo fmt --check
-
-  docs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-      - run: cargo doc --no-deps
-        env:
-          RUSTDOCFLAGS: -D warnings
-```
-
----
-
-## GitHub Actions: Publish Workflow
-
-```yaml
-# .github/workflows/publish.yml
-name: Publish
-
-on:
-  release:
-    types: [published]
-
-env:
-  CARGO_TERM_COLOR: always
-
-jobs:
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-      - run: cargo publish
-        env:
-          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
-```
-
----
-
 ## Core Algorithm Reference
 
-The algorithm works by:
+The estimator makes a single pass over the input, classifying characters inline and grouping runs of the same kind into segments. No regex, no allocations.
 
-1. **Split text** on whitespace and punctuation
-2. **Classify each segment** and apply appropriate token estimation:
+1. **Classify each character** as whitespace, punctuation, or word
+2. **Group consecutive same-kind characters** into segments
+3. **Score each segment** by type:
 
 | Segment Type | Detection | Token Count |
 |--------------|-----------|-------------|
-| Whitespace | `^\s+$` | 0 |
-| CJK characters | Unicode ranges | 1 per character |
-| Numbers | `^\d+([.,]\d+)*$` | 1 |
-| Short words (≤3 chars) | Length check | 1 |
-| Punctuation | Character class | `ceil(len / 2)` |
-| German/French diacritics | `[äöüßéèêë...]` | `ceil(len / 3)` |
-| Slavic diacritics | `[ąćęłń...]` | `ceil(len / 3.5)` |
+| Whitespace | `char::is_whitespace()` | 0 |
+| CJK characters | Unicode range checks | 1 per character |
+| Digit sequences | `char::is_ascii_digit()` | 1 |
+| Short words (≤3 bytes) | Length check | 1 |
+| Punctuation | Match table | `ceil(len / 2)` |
+| German/French diacritics | `is_german(c) \|\| is_french(c)` | `ceil(len / 3)` |
+| Spanish diacritics | `is_spanish(c)` | `ceil(len / 3.5)` |
 | Default alphanumeric | Fallback | `ceil(len / 6)` |
+| Other (emojis, mixed) | Fallback | 1 per character |
