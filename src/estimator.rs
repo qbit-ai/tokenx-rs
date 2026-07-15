@@ -66,6 +66,7 @@ fn is_punctuation(c: char) -> bool {
             | '='
             | '`'
             | '~'
+            | '_'
     )
 }
 
@@ -326,8 +327,11 @@ mod tests {
 
     #[test]
     fn underscore_identifiers() {
+        // `_` is a punctuation split boundary in the upstream JS `tokenx`
+        // (its `punctuation` regex includes `_`), so `process_items` splits
+        // into `process` + `_` + `items`: ceil(7/6) + 1 + ceil(5/6) = 4.
         let count = estimate_token_count("process_items");
-        assert_eq!(count, 13); // 1 per char (not alphanumeric due to _)
+        assert_eq!(count, 4);
     }
 
     #[test]
